@@ -1,8 +1,17 @@
-
 require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
+
+const healthRoutes = require("./routes/health");
+const authRoutes = require("./routes/auth");
+const profileRoutes = require("./routes/profile");
+const postcodeRoutes = require("./routes/postcode");
+const wasteRecordRoutes = require("./routes/wasteRecords");
+const adminWasteRecordRoutes = require("./routes/adminWasteRecords");
+const analyticsRoutes = require("./routes/analytics");
+
+const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,13 +20,26 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Health-check endpoint
-app.get("/api/health", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "KITARO API is running",
-  });
-});
+// Health-check endpoints
+app.use("/api/health", healthRoutes);
+
+// Authentication endpoints
+app.use("/api/auth", authRoutes);
+
+// Profile endpoints
+app.use("/api/profile", profileRoutes);
+
+// Postcode and area lookup
+app.use("/api/postcode", postcodeRoutes);
+
+// Waste-record endpoints
+app.use("/api/waste-records", wasteRecordRoutes);
+
+// Admin waste-record endpoints
+app.use("/api/admin/waste-records", adminWasteRecordRoutes);
+
+// SQL analytics endpoints
+app.use("/api/analytics", analyticsRoutes);
 
 // Handle unknown routes
 app.use((req, res) => {
@@ -26,6 +48,9 @@ app.use((req, res) => {
     message: "Route not found",
   });
 });
+
+// Central error handler
+app.use(errorHandler);
 
 // Start server
 app.listen(PORT, () => {
