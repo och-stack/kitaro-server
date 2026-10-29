@@ -53,6 +53,6 @@ app.use((req, res) => {
 app.use(errorHandler);
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`KITARO API running at http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`KITARO server running on port ${PORT}`);
 });
