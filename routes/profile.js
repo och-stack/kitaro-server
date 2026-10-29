@@ -61,13 +61,10 @@ router.patch("/", authenticateUser, async (req, res) => {
     }
 
     if (Object.hasOwn(req.body, "user_type")) {
-        if (
-            user_type !== null &&
-            !["resident", "small_business"].includes(user_type)
-        ) {
+        if (!["resident", "small_business"].includes(user_type)) {
             return res.status(400).json({
                 success: false,
-                message: "Invalid user type",
+                message: "User type must be resident or small_business",
             });
         }
 
@@ -77,8 +74,10 @@ router.patch("/", authenticateUser, async (req, res) => {
     if (Object.hasOwn(req.body, "postal_code")) {
         if (
             postal_code !== null &&
-            (typeof postal_code !== "string" ||
-                !/^\d{5}$/.test(postal_code.trim()))
+            (
+                typeof postal_code !== "string" ||
+                !/^\d{5}$/.test(postal_code.trim())
+            )
         ) {
             return res.status(400).json({
                 success: false,
@@ -88,6 +87,9 @@ router.patch("/", authenticateUser, async (req, res) => {
 
         updates.postal_code =
             postal_code === null ? null : postal_code.trim();
+
+        // Clear the old area when the postcode changes.
+        updates.matched_area = null;
     }
 
     if (Object.keys(updates).length === 0) {

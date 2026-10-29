@@ -7,16 +7,14 @@ const router = express.Router();
 
 // Register a new user.
 router.post("/signup", async (req, res) => {
-    const { email, password, display_name, user_type, postal_code } = req.body;
+    const { email, password, display_name } = req.body;
 
     if (
-        !email ||
-        !password ||
-        !display_name ||
         typeof email !== "string" ||
         typeof password !== "string" ||
         typeof display_name !== "string" ||
         !email.trim() ||
+        !password ||
         !display_name.trim()
     ) {
         return res.status(400).json({
@@ -32,13 +30,6 @@ router.post("/signup", async (req, res) => {
         });
     }
 
-    if (user_type && !["resident", "small_business"].includes(user_type)) {
-        return res.status(400).json({
-            success: false,
-            message: "Invalid user type",
-        });
-    }
-
     try {
         const { data, error } = await supabase.auth.signUp({
             email: email.trim(),
@@ -46,8 +37,6 @@ router.post("/signup", async (req, res) => {
             options: {
                 data: {
                     display_name: display_name.trim(),
-                    ...(user_type ? { user_type } : {}),
-                    ...(postal_code ? { postal_code } : {}),
                 },
             },
         });
@@ -105,7 +94,7 @@ router.post("/login", async (req, res) => {
             password,
         });
 
-        if (error) {
+        if (error || !data.user || !data.session) {
             return res.status(401).json({
                 success: false,
                 message: "Unable to sign in with these credentials",
