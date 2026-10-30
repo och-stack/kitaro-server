@@ -58,7 +58,12 @@ app.use((req, res) => {
 // Central error handler
 app.use(errorHandler);
 
-// Start server
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`KITARO server running on port ${PORT}`);
-});
+// Export app for Vercel
+module.exports = app;
+
+// Start server locally
+if (require.main === module) {
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`KITARO server running on port ${PORT}`);
+  });
+}
