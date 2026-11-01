@@ -1,7 +1,7 @@
+
 const express = require("express");
 const router = express.Router();
 
-const supabase = require("../supabaseClient");
 const authenticateUser = require("../middleware/authenticateUser");
 const validateUUID = require("../middleware/validateUUID");
 
@@ -46,7 +46,7 @@ router.post("/", authenticateUser, async (req, res) => {
     }
 
     try {
-        const { data, error } = await supabase
+        const { data, error } = await req.supabase
             .from("kitaro_waste_records")
             .insert({
                 user_id: req.user.id,
@@ -83,7 +83,7 @@ router.post("/", authenticateUser, async (req, res) => {
 // List the logged-in user's waste reports.
 router.get("/", authenticateUser, async (req, res) => {
     try {
-        const { data, error } = await supabase
+        const { data, error } = await req.supabase
             .from("kitaro_waste_records")
             .select("*")
             .eq("user_id", req.user.id)
@@ -110,7 +110,7 @@ router.get("/", authenticateUser, async (req, res) => {
 // Retrieve one report owned by the logged-in user.
 router.get("/:id", authenticateUser, async (req, res) => {
     try {
-        const { data, error } = await supabase
+        const { data, error } = await req.supabase
             .from("kitaro_waste_records")
             .select("*")
             .eq("id", req.params.id)
