@@ -5,8 +5,8 @@ const authenticateUser = require("../middleware/authenticateUser");
 
 const router = express.Router();
 
-async function getAnalytics(functionName) {
-    const { data, error } = await supabase.rpc(functionName);
+async function getAnalytics(supabaseClient, functionName) {
+    const { data, error } = await supabaseClient.rpc(functionName);
 
     if (error) {
         throw error;
