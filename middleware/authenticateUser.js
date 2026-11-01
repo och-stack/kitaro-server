@@ -1,4 +1,5 @@
 
+const { createClient } = require("@supabase/supabase-js");
 const supabase = require("../supabaseClient");
 
 async function authenticateUser(req, res, next) {
@@ -21,6 +22,7 @@ async function authenticateUser(req, res, next) {
     }
 
     try {
+        // Verify the user's access token
         const { data, error } = await supabase.auth.getUser(accessToken);
 
         if (error || !data.user) {
@@ -31,6 +33,24 @@ async function authenticateUser(req, res, next) {
         }
 
         req.user = data.user;
+
+        // Create a Supabase client using this user's access token
+        req.supabase = createClient(
+            process.env.SUPABASE_URL,
+            process.env.SUPABASE_ANON_KEY,
+            {
+                global: {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                },
+                auth: {
+                    autoRefreshToken: false,
+                    persistSession: false,
+                    detectSessionInUrl: false,
+                },
+            }
+        );
 
         next();
     } catch (error) {
