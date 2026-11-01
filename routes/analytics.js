@@ -25,7 +25,12 @@ router.get("/hotspots", authenticateUser, async (req, res) => {
             analytics: data,
         });
     } catch (error) {
-        console.error("Hotspot analytics error:", error.message);
+        console.error("Hotspot analytics error:", {
+            message: error.message,
+            code: error.code,
+            details: error.details,
+            hint: error.hint,
+        });
 
         return res.status(500).json({
             success: false,
