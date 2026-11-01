@@ -1,6 +1,5 @@
 
 const express = require("express");
-const supabase = require("../supabaseClient");
 const authenticateUser = require("../middleware/authenticateUser");
 
 const router = express.Router();
@@ -8,7 +7,7 @@ const router = express.Router();
 // Get the authenticated user's profile.
 router.get("/", authenticateUser, async (req, res) => {
     try {
-        const { data, error } = await supabase
+        const { data, error } = await req.supabase
             .from("kitaro_users")
             .select(
                 "id, display_name, user_type, postal_code, matched_area, created_at, updated_at"
@@ -102,7 +101,7 @@ router.patch("/", authenticateUser, async (req, res) => {
     updates.updated_at = new Date().toISOString();
 
     try {
-        const { data, error } = await supabase
+        const { data, error } = await req.supabase
             .from("kitaro_users")
             .update(updates)
             .eq("id", req.user.id)

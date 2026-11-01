@@ -1,10 +1,10 @@
 
 const express = require("express");
-const supabase = require("../supabaseClient");
 const authenticateUser = require("../middleware/authenticateUser");
 
 const router = express.Router();
 
+// Look up a Malaysian postcode and save the matched area.
 router.post("/lookup", authenticateUser, async (req, res) => {
     const { postal_code } = req.body;
 
@@ -42,10 +42,10 @@ router.post("/lookup", authenticateUser, async (req, res) => {
 
         const result = await response.json();
 
-        // The postal endpoint returns a list of matching places.
+        // Get the first matching place.
         const place = Array.isArray(result) ? result[0] : result;
 
-        if (!place || !place.placeName) {
+        if (!place) {
             return res.status(404).json({
                 success: false,
                 message: "No area information found for this postcode",
@@ -54,12 +54,19 @@ router.post("/lookup", authenticateUser, async (req, res) => {
 
         const matchedArea = [
             place.placeName,
-            place.adminName1,
+            place.admin1?.name || place.adminName1,
         ]
             .filter(Boolean)
             .join(", ");
 
-        const { data, error } = await supabase
+        if (!matchedArea) {
+            return res.status(404).json({
+                success: false,
+                message: "No area information found for this postcode",
+            });
+        }
+
+        const { data, error } = await req.supabase
             .from("kitaro_users")
             .update({
                 postal_code: postcode,
