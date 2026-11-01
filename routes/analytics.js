@@ -1,12 +1,12 @@
 
 const express = require("express");
-const supabase = require("../supabaseClient");
 const authenticateUser = require("../middleware/authenticateUser");
 
 const router = express.Router();
 
-async function getAnalytics(supabaseClient, functionName) {
-    const { data, error } = await supabaseClient.rpc(functionName);
+// Reusable analytics function
+async function getAnalytics(client, functionName) {
+    const { data, error } = await client.rpc(functionName);
 
     if (error) {
         throw error;
@@ -15,22 +15,20 @@ async function getAnalytics(supabaseClient, functionName) {
     return data;
 }
 
-// Waste hotspots.
+// Waste hotspots
 router.get("/hotspots", authenticateUser, async (req, res) => {
     try {
-        const data = await getAnalytics("kitaro_analytics_hotspots");
+        const data = await getAnalytics(
+            req.supabase,
+            "kitaro_analytics_hotspots"
+        );
 
         return res.status(200).json({
             success: true,
             analytics: data,
         });
     } catch (error) {
-        console.error("Hotspot analytics error:", {
-            message: error.message,
-            code: error.code,
-            details: error.details,
-            hint: error.hint,
-        });
+        console.error("Hotspot analytics error:", error);
 
         return res.status(500).json({
             success: false,
@@ -39,17 +37,20 @@ router.get("/hotspots", authenticateUser, async (req, res) => {
     }
 });
 
-// Waste composition.
+// Waste composition
 router.get("/composition", authenticateUser, async (req, res) => {
     try {
-        const data = await getAnalytics("kitaro_analytics_composition");
+        const data = await getAnalytics(
+            req.supabase,
+            "kitaro_analytics_composition"
+        );
 
         return res.status(200).json({
             success: true,
             analytics: data,
         });
     } catch (error) {
-        console.error("Composition analytics error:", error.message);
+        console.error("Composition analytics error:", error);
 
         return res.status(500).json({
             success: false,
@@ -58,17 +59,20 @@ router.get("/composition", authenticateUser, async (req, res) => {
     }
 });
 
-// Monthly reporting trends.
+// Monthly reporting trends
 router.get("/trends", authenticateUser, async (req, res) => {
     try {
-        const data = await getAnalytics("kitaro_analytics_trends");
+        const data = await getAnalytics(
+            req.supabase,
+            "kitaro_analytics_trends"
+        );
 
         return res.status(200).json({
             success: true,
             analytics: data,
         });
     } catch (error) {
-        console.error("Reporting trends error:", error.message);
+        console.error("Reporting trends error:", error);
 
         return res.status(500).json({
             success: false,
