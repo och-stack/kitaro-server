@@ -23,6 +23,19 @@ router.post("/signup", async (req, res) => {
         });
     }
 
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanDisplayName = display_name.trim();
+
+    // Validate email format.
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(cleanEmail)) {
+        return res.status(400).json({
+            success: false,
+            message: "Please enter a valid email address",
+        });
+    }
+
     if (password.length < 8) {
         return res.status(400).json({
             success: false,
@@ -32,19 +45,26 @@ router.post("/signup", async (req, res) => {
 
     try {
         const { data, error } = await supabase.auth.signUp({
-            email: email.trim(),
+            email: cleanEmail,
             password,
             options: {
                 data: {
-                    display_name: display_name.trim(),
+                    display_name: cleanDisplayName,
                 },
             },
         });
 
         if (error) {
+            console.error("Supabase signup error:", {
+                message: error.message,
+                code: error.code,
+                status: error.status,
+            });
+
             return res.status(400).json({
                 success: false,
                 message: error.message,
+                code: error.code,
             });
         }
 
@@ -90,7 +110,7 @@ router.post("/login", async (req, res) => {
 
     try {
         const { data, error } = await supabase.auth.signInWithPassword({
-            email: email.trim(),
+            email: email.trim().toLowerCase(),
             password,
         });
 
