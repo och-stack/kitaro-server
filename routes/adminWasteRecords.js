@@ -21,7 +21,9 @@ router.get("/", authenticateUser, adminOnly, async (req, res) => {
             .from("kitaro_waste_records")
             .select(`
                 *,
-                user:kitaro_users!kitaro_waste_records_user_id_fkey (display_name)
+                user:kitaro_users!kitaro_waste_records_user_id_fkey (
+                    display_name
+                )
             `)
             .order("created_at", { ascending: false });
 
