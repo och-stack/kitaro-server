@@ -14,7 +14,7 @@ const ALLOWED_STATUSES = [
     "Resolved",
 ];
 
-// Admin: View all waste records
+// ADMIN: View all waste records
 router.get("/", authenticateUser, adminOnly, async (req, res) => {
     try {
         const { data, error } = await req.supabase
@@ -27,12 +27,16 @@ router.get("/", authenticateUser, adminOnly, async (req, res) => {
             `)
             .order("created_at", { ascending: false });
 
-        if (error) throw error;
+        if (error) {
+            console.error("Admin list reports database error:", error);
+            throw error;
+        }
 
         return res.status(200).json({
             success: true,
-            reports: data,
+            reports: data || [],
         });
+
     } catch (error) {
         console.error("Admin list reports error:", error.message);
 
@@ -43,7 +47,7 @@ router.get("/", authenticateUser, adminOnly, async (req, res) => {
     }
 });
 
-// Admin: Update waste record status
+// ADMIN: Update waste record status
 router.patch(
     "/:id/status",
     authenticateUser,
@@ -51,6 +55,7 @@ router.patch(
     async (req, res) => {
         const { status } = req.body;
 
+        // Validate requested status
         if (!ALLOWED_STATUSES.includes(status)) {
             return res.status(400).json({
                 success: false,
@@ -59,13 +64,15 @@ router.patch(
         }
 
         try {
+            const currentTime = new Date().toISOString();
+
             const updates = {
                 status,
                 last_edited_by: req.user.id,
-                updated_at: new Date().toISOString(),
+                updated_at: currentTime,
                 resolved_at:
                     status === "Resolved"
-                        ? new Date().toISOString()
+                        ? currentTime
                         : null,
             };
 
@@ -76,7 +83,10 @@ router.patch(
                 .select()
                 .maybeSingle();
 
-            if (error) throw error;
+            if (error) {
+                console.error("Admin status update database error:", error);
+                throw error;
+            }
 
             if (!data) {
                 return res.status(404).json({
@@ -87,9 +97,10 @@ router.patch(
 
             return res.status(200).json({
                 success: true,
-                message: "Waste record status updated",
+                message: "Waste record status updated successfully",
                 report: data,
             });
+
         } catch (error) {
             console.error("Admin status update error:", error.message);
 
