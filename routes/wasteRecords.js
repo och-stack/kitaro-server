@@ -142,4 +142,39 @@ router.get("/:id", authenticateUser, async (req, res) => {
     }
 });
 
+// Delete own Submitted waste report
+router.delete("/:id", authenticateUser, async (req, res) => {
+    try {
+        const { data, error } = await req.supabase
+            .from("kitaro_waste_records")
+            .delete()
+            .eq("id", req.params.id)
+            .eq("user_id", req.user.id)
+            .eq("status", "Submitted")
+            .select("id")
+            .maybeSingle();
+
+        if (error) throw error;
+
+        if (!data) {
+            return res.status(404).json({
+                success: false,
+                message: "Waste report not found or can no longer be deleted",
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Waste report deleted successfully",
+        });
+    } catch (error) {
+        console.error("Delete waste report error:", error.message);
+
+        return res.status(500).json({
+            success: false,
+            message: "Unable to delete waste report",
+        });
+    }
+});
+
 module.exports = router;
