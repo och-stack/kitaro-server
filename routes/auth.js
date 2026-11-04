@@ -1,10 +1,23 @@
 
+const express = require("express");
+const supabase = require("../supabaseClient");
+const authenticateUser = require("../middleware/authenticateUser");
+
+const router = express.Router();
+
 // Register a new user.
 router.post("/signup", async (req, res) => {
     const { email, password, display_name } = req.body;
 
     // Check required fields.
-    if (!email || !password || !display_name) {
+    if (
+        typeof email !== "string" ||
+        typeof password !== "string" ||
+        typeof display_name !== "string" ||
+        !email.trim() ||
+        !password ||
+        !display_name.trim()
+    ) {
         return res.status(400).json({
             success: false,
             message: "Email, password, and display name are required",
@@ -47,7 +60,7 @@ router.post("/signup", async (req, res) => {
             },
         });
 
-        // Handle Supabase errors.
+        // Check for Supabase errors.
         if (error) {
             console.log("Signup error:", error.message);
 
@@ -58,7 +71,7 @@ router.post("/signup", async (req, res) => {
             });
         }
 
-        // Send the successful response.
+        // Return successful registration.
         return res.status(201).json({
             success: true,
             message: data.session
@@ -83,3 +96,70 @@ router.post("/signup", async (req, res) => {
         });
     }
 });
+
+// Sign in an existing user.
+router.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+
+    // Check required fields.
+    if (
+        typeof email !== "string" ||
+        typeof password !== "string" ||
+        !email.trim() ||
+        !password
+    ) {
+        return res.status(400).json({
+            success: false,
+            message: "Email and password are required",
+        });
+    }
+
+    try {
+        // Check the user's login details.
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: email.trim().toLowerCase(),
+            password: password,
+        });
+
+        if (error || !data.user || !data.session) {
+            return res.status(401).json({
+                success: false,
+                message: "Unable to sign in with these credentials",
+            });
+        }
+
+        // Return successful login.
+        return res.status(200).json({
+            success: true,
+            message: "Login successful",
+            user: {
+                id: data.user.id,
+                email: data.user.email,
+            },
+            access_token: data.session.access_token,
+            refresh_token: data.session.refresh_token,
+        });
+
+    } catch (error) {
+        console.log("Login error:", error.message);
+
+        return res.status(500).json({
+            success: false,
+            message: "Unable to sign in",
+        });
+    }
+});
+
+// Get the currently logged-in user.
+router.get("/me", authenticateUser, (req, res) => {
+    return res.status(200).json({
+        success: true,
+        user: {
+            id: req.user.id,
+            email: req.user.email,
+        },
+    });
+});
+
+// Export the router.
+module.exports = router;
