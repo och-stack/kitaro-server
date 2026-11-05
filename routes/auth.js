@@ -7,16 +7,18 @@ const router = express.Router();
 
 // Register a new user.
 router.post("/signup", async (req, res) => {
-    const { email, password, display_name } = req.body;
+    const { email, password, display_name, user_type } = req.body;
 
     // Check required fields.
     if (
         typeof email !== "string" ||
         typeof password !== "string" ||
         typeof display_name !== "string" ||
+        typeof user_type !== "string" ||
         !email.trim() ||
         !password ||
-        !display_name.trim()
+        !display_name.trim() ||
+        !["resident", "small_business"].includes(user_type)
     ) {
         return res.status(400).json({
             success: false,
@@ -56,6 +58,7 @@ router.post("/signup", async (req, res) => {
             options: {
                 data: {
                     display_name: cleanDisplayName,
+                    user_type: user_type,
                 },
             },
         });
