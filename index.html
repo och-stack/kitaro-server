@@ -11,265 +11,283 @@
 
     <h1>KITARO API Documentation</h1>
 
-    <p>
-        KITARO is a Malaysian waste management and recycling
-        information platform. This backend provides API services
-        for user authentication, profile management, waste reporting,
-        postcode lookup, administrative management and waste analytics.
-    </p>
-
     <hr>
 
     <h2>1. API Overview</h2>
 
-    <ul>
-        <li><strong>Backend:</strong> Node.js and Express.js</li>
-        <li><strong>Database:</strong> Supabase PostgreSQL</li>
-        <li><strong>Authentication:</strong> Supabase Authentication</li>
-        <li><strong>External API:</strong> Countries.dev</li>
-        <li><strong>Response Format:</strong> JSON</li>
-        <li><strong>Content-Type:</strong> application/json</li>
-    </ul>
-
-    <p><strong>Base URL:</strong></p>
-    <pre>https://kitaro-server-indol.vercel.app</pre>
-
-    <p><strong>Authentication Header:</strong></p>
-    <pre>Authorization: Bearer YOUR_ACCESS_TOKEN</pre>
+    <p>
+        KITARO is a Malaysian waste-management platform that allows users
+        to submit waste reports, manage their profiles and view waste
+        analytics.
+    </p>
 
     <p>
-        Protected endpoints require a valid Supabase access token.
-        Include the token in the Authorization header.
+        The backend is built using Node.js and Express.js, with Supabase
+        providing authentication and PostgreSQL database services.
     </p>
+
+    <h3>Base URL</h3>
+    <pre>https://kitaro-server-indol.vercel.app</pre>
+
+    <h3>Authentication</h3>
+    <p>
+        Protected endpoints require a valid Supabase access token.
+        Include the token in the Authorization header:
+    </p>
+
+    <pre>Authorization: Bearer YOUR_ACCESS_TOKEN</pre>
+
+    <h3>Content Type</h3>
+    <pre>Content-Type: application/json</pre>
 
     <hr>
 
-    <h2>2. API Endpoint Summary</h2>
+    <h2>2. Backend NPM Packages</h2>
+
+    <p>
+        The following NPM packages are used by the KITARO backend.
+    </p>
 
     <table border="1" cellpadding="8">
         <thead>
             <tr>
-                <th>Module</th>
+                <th>Package</th>
+                <th>Installation Command</th>
+                <th>Purpose</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Express</td>
+                <td><code>npm install express</code></td>
+                <td>Creates the backend server, API routes and middleware.</td>
+            </tr>
+            <tr>
+                <td>Supabase JS</td>
+                <td><code>npm install @supabase/supabase-js</code></td>
+                <td>Connects to Supabase Authentication and PostgreSQL.</td>
+            </tr>
+            <tr>
+                <td>CORS</td>
+                <td><code>npm install cors</code></td>
+                <td>Allows frontend and backend cross-origin communication.</td>
+            </tr>
+            <tr>
+                <td>Dotenv</td>
+                <td><code>npm install dotenv</code></td>
+                <td>Loads environment variables from the .env file.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Install All Packages</h3>
+
+    <pre>npm install express @supabase/supabase-js cors dotenv</pre>
+
+    <p>
+        <strong>Note:</strong> Node.js built-in modules such as
+        <code>path</code> and the built-in <code>fetch</code> do not
+        require separate NPM installation. Nodemon is optional and can
+        be installed for automatic server restarts during development.
+    </p>
+
+    <hr>
+
+    <h2>3. API Endpoint Summary</h2>
+
+    <table border="1" cellpadding="8">
+        <thead>
+            <tr>
                 <th>Method</th>
                 <th>Endpoint</th>
+                <th>Description</th>
                 <th>Authentication</th>
             </tr>
         </thead>
-
         <tbody>
             <tr>
-                <td>Health</td>
                 <td>GET</td>
                 <td>/api/health</td>
+                <td>Check whether the API server is running.</td>
                 <td>No</td>
             </tr>
-
             <tr>
-                <td>Health</td>
                 <td>GET</td>
                 <td>/api/health/supabase</td>
+                <td>Check Supabase database connectivity.</td>
                 <td>No</td>
             </tr>
-
             <tr>
-                <td>Authentication</td>
                 <td>POST</td>
                 <td>/api/auth/signup</td>
+                <td>Register a new user.</td>
                 <td>No</td>
             </tr>
-
             <tr>
-                <td>Authentication</td>
                 <td>POST</td>
                 <td>/api/auth/login</td>
+                <td>Sign in an existing user.</td>
                 <td>No</td>
             </tr>
-
             <tr>
-                <td>Authentication</td>
                 <td>GET</td>
                 <td>/api/auth/me</td>
+                <td>Retrieve the authenticated user's details.</td>
                 <td>Yes</td>
             </tr>
-
             <tr>
-                <td>Profile</td>
                 <td>GET</td>
                 <td>/api/profile</td>
+                <td>Retrieve the user's profile.</td>
                 <td>Yes</td>
             </tr>
-
             <tr>
-                <td>Profile</td>
                 <td>PATCH</td>
                 <td>/api/profile</td>
+                <td>Update the user's profile.</td>
                 <td>Yes</td>
             </tr>
-
             <tr>
-                <td>Postcode</td>
                 <td>POST</td>
                 <td>/api/postcode/lookup</td>
+                <td>Look up a Malaysian postcode and update the user's area.</td>
                 <td>Yes</td>
             </tr>
-
             <tr>
-                <td>Waste Records</td>
                 <td>POST</td>
                 <td>/api/waste-records</td>
+                <td>Submit a new waste report.</td>
                 <td>Yes</td>
             </tr>
-
             <tr>
-                <td>Waste Records</td>
                 <td>GET</td>
                 <td>/api/waste-records</td>
+                <td>Retrieve the authenticated user's waste reports.</td>
                 <td>Yes</td>
             </tr>
-
             <tr>
-                <td>Waste Records</td>
                 <td>GET</td>
                 <td>/api/waste-records/:id</td>
+                <td>Retrieve a specific waste report.</td>
                 <td>Yes</td>
             </tr>
-
             <tr>
-                <td>Waste Records</td>
                 <td>DELETE</td>
                 <td>/api/waste-records/:id</td>
+                <td>Delete an eligible waste report.</td>
                 <td>Yes</td>
             </tr>
-
             <tr>
-                <td>Admin</td>
                 <td>GET</td>
                 <td>/api/admin/waste-records</td>
+                <td>Retrieve all waste reports for administration.</td>
                 <td>Admin</td>
             </tr>
-
             <tr>
-                <td>Admin</td>
                 <td>PATCH</td>
                 <td>/api/admin/waste-records/:id/status</td>
+                <td>Update a waste report's status.</td>
                 <td>Admin</td>
             </tr>
-
             <tr>
-                <td>Analytics</td>
                 <td>GET</td>
                 <td>/api/analytics/hotspots</td>
+                <td>Retrieve waste hotspot analytics.</td>
                 <td>Yes</td>
             </tr>
-
             <tr>
-                <td>Analytics</td>
                 <td>GET</td>
                 <td>/api/analytics/composition</td>
+                <td>Retrieve waste composition analytics.</td>
                 <td>Yes</td>
             </tr>
-
             <tr>
-                <td>Analytics</td>
                 <td>GET</td>
                 <td>/api/analytics/trends</td>
+                <td>Retrieve waste reporting trend analytics.</td>
                 <td>Yes</td>
             </tr>
         </tbody>
     </table>
 
-    <p><strong>Total:</strong> 17 API endpoints across 7 route modules.</p>
-
     <hr>
 
-    <h2>3. Health Check API</h2>
+    <h2>4. Health Check API</h2>
 
-    <h3>GET /api/health</h3>
+    <h3>4.1 Check API Server</h3>
 
-    <p><strong>Purpose:</strong></p>
-    <p>
-        Checks whether the KITARO Express backend server
-        is running and responding to requests.
-    </p>
+    <p><strong>GET</strong> <code>/api/health</code></p>
+    <p>Checks whether the Express API server is running.</p>
 
-    <p><strong>Authentication:</strong> Not required.</p>
-
-    <p><strong>Successful response (200):</strong></p>
-
-    <pre>
-{
+    <h4>Successful Response — 200 OK</h4>
+    <pre>{
     "success": true,
     "message": "KITARO API is running"
-}
-    </pre>
+}</pre>
 
-    <h3>GET /api/health/supabase</h3>
+    <h3>4.2 Check Supabase Connection</h3>
 
-    <p><strong>Purpose:</strong></p>
+    <p><strong>GET</strong> <code>/api/health/supabase</code></p>
+
     <p>
-        Checks whether the backend can successfully query
-        the Supabase PostgreSQL database.
+        Checks the database connection by attempting to retrieve a record
+        from the <code>kitaro_users</code> table.
     </p>
 
-    <p><strong>Authentication:</strong> Not required.</p>
-
-    <p><strong>Successful response (200):</strong></p>
-
-    <pre>
-{
+    <h4>Successful Response — 200 OK</h4>
+    <pre>{
     "success": true,
-    "message": "Supabase connection is working"
-}
-    </pre>
+    "message": "Supabase connection successful"
+}</pre>
 
-    <p><strong>Database connection failure (503):</strong></p>
-
-    <pre>
-{
+    <h4>Failed Response — 503 Service Unavailable</h4>
+    <pre>{
     "success": false,
-    "message": "Supabase is unavailable"
-}
-    </pre>
+    "message": "Supabase connection failed"
+}</pre>
 
     <hr>
 
-    <h2>4. Authentication API</h2>
+    <h2>5. Authentication API</h2>
 
-    <h3>POST /api/auth/signup</h3>
+    <h3>5.1 Register a New User</h3>
 
-    <p><strong>Purpose:</strong></p>
+    <p><strong>POST</strong> <code>/api/auth/signup</code></p>
+
     <p>
-        Registers a new KITARO user using Supabase Authentication.
-        The user account is created with email, password and display name.
+        Registers a new user through Supabase Authentication.
+        The endpoint validates the submitted information before
+        creating the account.
     </p>
 
-    <p><strong>Authentication:</strong> Not required.</p>
-
-    <p><strong>Request body:</strong></p>
-
-    <pre>
-{
+    <p><strong>Request Body</strong></p>
+    <pre>{
     "email": "user@example.com",
-    "password": "password123",
-    "display_name": "John"
-}
-    </pre>
+    "password": "Password123",
+    "display_name": "John",
+    "user_type": "resident"
+}</pre>
 
-    <p><strong>Validation requirements:</strong></p>
-
+    <p><strong>Required Fields</strong></p>
     <ul>
-        <li>Email, password and display name are required.</li>
-        <li>Email must have a valid basic email format.</li>
-        <li>Password must contain at least 8 characters.</li>
-        <li>Display name cannot be empty.</li>
-        <li>Email is converted to lowercase before registration.</li>
-        <li>Display name is trimmed before registration.</li>
+        <li><code>email</code>: Must be a non-empty string with a valid email format.</li>
+        <li><code>password</code>: Must be a non-empty string with at least 8 characters.</li>
+        <li><code>display_name</code>: Must be a non-empty string.</li>
+        <li><code>user_type</code>: Must be either <code>resident</code> or <code>small_business</code>.</li>
     </ul>
 
-    <p><strong>Successful response (201):</strong></p>
+    <p><strong>Validation and Data Handling</strong></p>
+    <ul>
+        <li>Checks that all required fields are provided as strings.</li>
+        <li>Trims whitespace from the email and display name.</li>
+        <li>Converts the email address to lowercase.</li>
+        <li>Checks the email format using basic character-position validation.</li>
+        <li>Checks that the password contains at least 8 characters.</li>
+        <li>Stores the display name and user type in Supabase Auth user metadata.</li>
+    </ul>
 
-    <pre>
-{
+    <h4>Successful Response — 201 Created</h4>
+    <pre>{
     "success": true,
     "message": "Account created successfully",
     "user": {
@@ -278,52 +296,82 @@
     },
     "access_token": "ACCESS_TOKEN",
     "refresh_token": "REFRESH_TOKEN"
-}
-    </pre>
+}</pre>
 
     <p>
-        If email confirmation is enabled and Supabase does not
-        return a session, the message will be:
-        "Account created. Check your email to confirm your account."
+        The success message depends on whether Supabase returns an
+        active session.
     </p>
+
+    <p><strong>When an active session is returned:</strong></p>
+    <pre>"message": "Account created successfully"</pre>
+
+    <p><strong>When email confirmation is required:</strong></p>
+    <pre>"message": "Account created. Check your email to confirm your account."</pre>
 
     <p>
-        In this case, access_token and refresh_token are null.
+        When no active session is returned, the access and refresh
+        tokens are <code>null</code>. The user object is also
+        <code>null</code> if Supabase does not return a user.
     </p>
 
-    <p><strong>Possible errors:</strong></p>
+    <h4>Missing or Invalid Required Fields — 400 Bad Request</h4>
+    <pre>{
+    "success": false,
+    "message": "Email, password, and display name are required"
+}</pre>
 
+    <h4>Invalid Email — 400 Bad Request</h4>
+    <pre>{
+    "success": false,
+    "message": "Please enter a valid email address"
+}</pre>
+
+    <h4>Password Too Short — 400 Bad Request</h4>
+    <pre>{
+    "success": false,
+    "message": "Password must be at least 8 characters"
+}</pre>
+
+    <h4>Supabase Signup Error — 400 Bad Request</h4>
+    <pre>{
+    "success": false,
+    "message": "SUPABASE_ERROR_MESSAGE",
+    "code": "SUPABASE_ERROR_CODE"
+}</pre>
+
+    <h4>Unexpected Server Error — 500 Internal Server Error</h4>
+    <pre>{
+    "success": false,
+    "message": "Unable to create account"
+}</pre>
+
+    <h3>5.2 Sign In</h3>
+
+    <p><strong>POST</strong> <code>/api/auth/login</code></p>
+
+    <p>
+        Authenticates an existing user through Supabase
+        <code>signInWithPassword()</code>.
+    </p>
+
+    <p><strong>Request Body</strong></p>
+    <pre>{
+    "email": "user@example.com",
+    "password": "Password123"
+}</pre>
+
+    <p><strong>Validation and Data Handling</strong></p>
     <ul>
-        <li>400: Email, password and display name are required.</li>
-        <li>400: Please enter a valid email address.</li>
-        <li>400: Password must be at least 8 characters.</li>
-        <li>400: Supabase registration error.</li>
-        <li>500: Unable to create account.</li>
+        <li>Checks that email and password are non-empty strings.</li>
+        <li>Trims whitespace from the email address.</li>
+        <li>Converts the email address to lowercase.</li>
+        <li>Authenticates the user using Supabase.</li>
+        <li>Checks that Supabase returns both a user and an active session.</li>
     </ul>
 
-    <h3>POST /api/auth/login</h3>
-
-    <p><strong>Purpose:</strong></p>
-    <p>
-        Authenticates an existing user using their email
-        address and password.
-    </p>
-
-    <p><strong>Authentication:</strong> Not required.</p>
-
-    <p><strong>Request body:</strong></p>
-
-    <pre>
-{
-    "email": "user@example.com",
-    "password": "password123"
-}
-    </pre>
-
-    <p><strong>Successful response (200):</strong></p>
-
-    <pre>
-{
+    <h4>Successful Response — 200 OK</h4>
+    <pre>{
     "success": true,
     "message": "Login successful",
     "user": {
@@ -332,242 +380,196 @@
     },
     "access_token": "ACCESS_TOKEN",
     "refresh_token": "REFRESH_TOKEN"
-}
-    </pre>
+}</pre>
 
-    <p><strong>Possible errors:</strong></p>
+    <h4>Missing Required Fields — 400 Bad Request</h4>
+    <pre>{
+    "success": false,
+    "message": "Email and password are required"
+}</pre>
 
-    <ul>
-        <li>400: Email and password are required.</li>
-        <li>401: Unable to sign in with these credentials.</li>
-        <li>500: Unable to sign in.</li>
-    </ul>
+    <h4>Invalid Login Credentials — 401 Unauthorized</h4>
+    <pre>{
+    "success": false,
+    "message": "Unable to sign in with these credentials"
+}</pre>
 
-    <h3>GET /api/auth/me</h3>
+    <h4>Unexpected Server Error — 500 Internal Server Error</h4>
+    <pre>{
+    "success": false,
+    "message": "Unable to sign in"
+}</pre>
 
-    <p><strong>Purpose:</strong></p>
+    <h3>5.3 Retrieve Authenticated User</h3>
+
+    <p><strong>GET</strong> <code>/api/auth/me</code></p>
+
     <p>
-        Retrieves the basic account information of the
-        currently authenticated user.
+        Uses the <code>authenticateUser</code> middleware to verify
+        the access token and retrieve the currently authenticated
+        user's details.
     </p>
 
-    <p><strong>Authentication:</strong> Required.</p>
+    <p><strong>Header</strong></p>
+    <pre>Authorization: Bearer YOUR_ACCESS_TOKEN</pre>
 
-    <p><strong>Successful response (200):</strong></p>
-
-    <pre>
-{
+    <h4>Successful Response — 200 OK</h4>
+    <pre>{
     "success": true,
     "user": {
         "id": "USER_UUID",
         "email": "user@example.com"
     }
-}
-    </pre>
-
-    <p><strong>Possible errors:</strong></p>
-
-    <ul>
-        <li>401: Missing or invalid authentication token.</li>
-    </ul>
+}</pre>
 
     <hr>
 
-    <h2>5. User Profile API</h2>
+    <h2>6. User Profile API</h2>
 
-    <h3>GET /api/profile</h3>
+    <h3>6.1 Retrieve User Profile</h3>
 
-    <p><strong>Purpose:</strong></p>
+    <p><strong>GET</strong> <code>/api/profile</code></p>
+
     <p>
-        Retrieves the authenticated user's profile information
-        from the kitaro_users table.
+        Retrieves the authenticated user's profile from
+        <code>kitaro_users</code>.
     </p>
 
-    <p><strong>Authentication:</strong> Required.</p>
+    <p><strong>Header</strong></p>
+    <pre>Authorization: Bearer YOUR_ACCESS_TOKEN</pre>
 
-    <p><strong>Successful response (200):</strong></p>
-
-    <pre>
-{
+    <h4>Successful Response — 200 OK</h4>
+    <pre>{
     "success": true,
     "profile": {
         "id": "USER_UUID",
         "display_name": "John",
         "user_type": "resident",
         "postal_code": "48000",
-        "matched_area": "Rawang, Selangor",
-        "created_at": "TIMESTAMP",
-        "updated_at": "TIMESTAMP"
+        "matched_area": "Rawang",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
     }
-}
-    </pre>
+}</pre>
 
-    <p><strong>Possible errors:</strong></p>
-
-    <ul>
-        <li>401: Authentication required.</li>
-        <li>404: Profile not found.</li>
-        <li>500: Unable to retrieve profile.</li>
-    </ul>
-
-    <h3>PATCH /api/profile</h3>
-
-    <p><strong>Purpose:</strong></p>
     <p>
-        Updates permitted profile information for the
-        authenticated user.
+        The response fields are based on the profile query. Actual values
+        depend on the user's saved profile.
     </p>
 
-    <p><strong>Authentication:</strong> Required.</p>
+    <h3>6.2 Update User Profile</h3>
 
-    <p><strong>Request body:</strong></p>
+    <p><strong>PATCH</strong> <code>/api/profile</code></p>
 
-    <pre>
-{
+    <p>
+        Updates the authenticated user's profile. Only the supported
+        fields supplied in the request are updated.
+    </p>
+
+    <p><strong>Request Body</strong></p>
+    <pre>{
     "display_name": "John Tan",
     "user_type": "small_business",
     "postal_code": "48000"
-}
-    </pre>
+}</pre>
 
-    <p><strong>Permitted fields:</strong></p>
-
+    <p><strong>Supported Fields</strong></p>
     <ul>
-        <li>display_name: Non-empty string.</li>
-        <li>user_type: resident or small_business.</li>
-        <li>postal_code: Five-digit Malaysian postcode or null.</li>
+        <li><code>display_name</code>: Non-empty display name.</li>
+        <li><code>user_type</code>: <code>resident</code> or <code>small_business</code>.</li>
+        <li><code>postal_code</code>: Five-digit Malaysian postcode or null.</li>
     </ul>
 
-    <p><strong>Additional validation:</strong></p>
+    <p>
+        When the postal code changes, the saved matched area is cleared
+        until a new postcode lookup is performed.
+    </p>
 
-    <ul>
-        <li>At least one valid field must be supplied.</li>
-        <li>Empty display names are rejected.</li>
-        <li>Invalid user types are rejected.</li>
-        <li>Invalid postcodes are rejected.</li>
-        <li>Changing postal_code clears matched_area.</li>
-        <li>updated_at is automatically updated.</li>
-    </ul>
-
-    <p><strong>Successful response (200):</strong></p>
-
-    <pre>
-{
+    <h4>Successful Response — 200 OK</h4>
+    <pre>{
     "success": true,
-    "message": "Profile updated successfully",
-    "profile": {
-        "id": "USER_UUID",
-        "display_name": "John Tan",
-        "user_type": "small_business",
-        "postal_code": "48000",
-        "matched_area": null,
-        "updated_at": "TIMESTAMP"
-    }
-}
-    </pre>
+    "message": "Profile updated successfully"
+}</pre>
 
-    <p><strong>Possible errors:</strong></p>
-
-    <ul>
-        <li>400: Display name must not be empty.</li>
-        <li>400: User type must be resident or small_business.</li>
-        <li>400: Enter a valid 5-digit Malaysian postcode.</li>
-        <li>400: Provide at least one valid field to update.</li>
-        <li>401: Authentication required.</li>
-        <li>500: Unable to update profile.</li>
-    </ul>
+    <h4>Validation Error — 400 Bad Request</h4>
+    <pre>{
+    "success": false,
+    "message": "No valid profile fields provided"
+}</pre>
 
     <hr>
 
-    <h2>6. Postcode Lookup API</h2>
+    <h2>7. Postcode Lookup API</h2>
 
-    <h3>POST /api/postcode/lookup</h3>
+    <h3>7.1 Look Up Malaysian Postcode</h3>
 
-    <p><strong>Purpose:</strong></p>
+    <p><strong>POST</strong> <code>/api/postcode/lookup</code></p>
 
     <p>
-        Looks up a Malaysian postcode using Countries.dev,
-        retrieves the matching area and saves the postcode
-        and matched area to the authenticated user's profile.
+        Uses the Countries.dev API to look up a Malaysian postcode.
+        The returned area is saved in the authenticated user's profile.
     </p>
 
-    <p><strong>Authentication:</strong> Required.</p>
+    <p><strong>Request Body</strong></p>
+    <pre>{
+    "postal_code": "48000"
+}</pre>
 
-    <p><strong>External API:</strong></p>
-
+    <p><strong>External API</strong></p>
     <pre>https://countries.dev/postal/MY/{postcode}</pre>
 
-    <p><strong>Request body:</strong></p>
+    <p>
+        The backend retrieves the place name and state information,
+        then updates the user's <code>postal_code</code> and
+        <code>matched_area</code> in <code>kitaro_users</code>.
+    </p>
 
-    <pre>
-{
-    "postal_code": "48000"
-}
-    </pre>
-
-    <p><strong>Processing:</strong></p>
-
-    <ol>
-        <li>Validates the five-digit Malaysian postcode.</li>
-        <li>Sends a request to Countries.dev.</li>
-        <li>Retrieves the first matching place.</li>
-        <li>Combines the place name and state information.</li>
-        <li>Updates postal_code and matched_area in kitaro_users.</li>
-    </ol>
-
-    <p><strong>Successful response (200):</strong></p>
-
-    <pre>
-{
+    <h4>Successful Response — 200 OK</h4>
+    <pre>{
     "success": true,
-    "message": "Postcode matched successfully",
-    "profile": {
-        "id": "USER_UUID",
-        "postal_code": "48000",
-        "matched_area": "AREA, STATE"
-    }
-}
-    </pre>
+    "message": "Postcode lookup successful"
+}</pre>
 
-    <p><strong>Possible errors:</strong></p>
+    <h4>Validation Error — 400 Bad Request</h4>
+    <pre>{
+    "success": false,
+    "message": "Invalid Malaysian postcode"
+}</pre>
 
-    <ul>
-        <li>400: Enter a valid 5-digit Malaysian postcode.</li>
-        <li>401: Authentication required.</li>
-        <li>404: Postcode not found.</li>
-        <li>404: No area information found for this postcode.</li>
-        <li>502: Postcode lookup service is unavailable.</li>
-        <li>500: Unable to look up postcode.</li>
-    </ul>
+    <h4>Postcode Not Found — 404 Not Found</h4>
+    <pre>{
+    "success": false,
+    "message": "Postcode not found"
+}</pre>
+
+    <h4>External Service Error — 502 Bad Gateway</h4>
+    <pre>{
+    "success": false,
+    "message": "Unable to retrieve postcode information"
+}</pre>
 
     <hr>
 
-    <h2>7. Waste Records API</h2>
+    <h2>8. Waste Records API</h2>
+
+    <h3>8.1 Submit a Waste Report</h3>
+
+    <p><strong>POST</strong> <code>/api/waste-records</code></p>
 
     <p>
-        Waste reports are stored in the kitaro_waste_records table.
-        Each authenticated user can manage their own waste reports.
+        Allows an authenticated user to submit a new waste report.
+        The user ID is obtained from the verified access token.
     </p>
 
-    <h3>POST /api/waste-records</h3>
-
-    <p><strong>Purpose:</strong> Submits a new waste report.</p>
-
-    <p><strong>Authentication:</strong> Required.</p>
-
-    <p><strong>Request body:</strong></p>
-
-    <pre>
-{
+    <p><strong>Request Body</strong></p>
+    <pre>{
     "waste_type": "Plastic",
-    "waste_weight": 5.5,
-    "area": "Rawang, Selangor",
-    "description": "Plastic bottles collected"
-}
-    </pre>
+    "waste_weight": 5,
+    "area": "Rawang",
+    "description": "Plastic bottles collected from the neighbourhood"
+}</pre>
 
-    <p><strong>Accepted waste types:</strong></p>
-
+    <p><strong>Supported Waste Types</strong></p>
     <ul>
         <li>General / Residual Waste &amp; Food Waste</li>
         <li>Paper &amp; Cardboard</li>
@@ -577,713 +579,538 @@
         <li>Electronic Waste (E-waste)</li>
     </ul>
 
-    <p><strong>Validation requirements:</strong></p>
-
+    <p><strong>Validation Rules</strong></p>
     <ul>
-        <li>Waste type must match an accepted category.</li>
-        <li>Area is required and cannot be empty.</li>
-        <li>Description is required and cannot be empty.</li>
-        <li>Waste weight is optional.</li>
-        <li>If supplied, waste weight must be a positive number.</li>
-        <li>User ID is obtained from the authenticated session.</li>
-        <li>The initial status is determined by the database default.</li>
+        <li><code>waste_type</code> must match a supported waste type.</li>
+        <li><code>area</code> must be a non-empty string.</li>
+        <li><code>description</code> must be a non-empty string.</li>
+        <li><code>waste_weight</code> is optional but must be a finite positive number when provided.</li>
     </ul>
 
-    <p><strong>Successful response (201):</strong></p>
+    <p>
+        The report status is assigned using the database default.
+        The user cannot submit a report on behalf of another user
+        by supplying a different user ID.
+    </p>
 
-    <pre>
-{
+    <h4>Successful Response — 201 Created</h4>
+    <pre>{
     "success": true,
     "message": "Waste report submitted successfully",
-    "report": {
-        "id": "REPORT_UUID",
-        "user_id": "USER_UUID",
+    "record": {
+        "id": "RECORD_UUID",
         "waste_type": "Plastic",
-        "waste_weight": 5.5,
-        "area": "Rawang, Selangor",
-        "description": "Plastic bottles collected",
-        "status": "Submitted",
-        "created_at": "TIMESTAMP"
+        "waste_weight": 5,
+        "area": "Rawang",
+        "description": "Plastic bottles collected from the neighbourhood",
+        "status": "Submitted"
     }
-}
-    </pre>
+}</pre>
+
+    <h3>8.2 Retrieve User Waste Reports</h3>
+
+    <p><strong>GET</strong> <code>/api/waste-records</code></p>
 
     <p>
-        The report object includes the database-returned fields.
+        Retrieves waste reports belonging to the authenticated user.
+        Records are ordered by creation date, newest first.
     </p>
 
-    <p><strong>Possible errors:</strong></p>
-
-    <ul>
-        <li>400: Valid waste type, area and description are required.</li>
-        <li>400: Waste weight must be a positive number.</li>
-        <li>401: Authentication required.</li>
-        <li>500: Unable to submit waste report.</li>
-    </ul>
-
-    <h3>GET /api/waste-records</h3>
-
-    <p><strong>Purpose:</strong></p>
-
-    <p>
-        Retrieves all waste reports belonging to the
-        authenticated user.
-    </p>
-
-    <p><strong>Authentication:</strong> Required.</p>
-
-    <p><strong>Successful response (200):</strong></p>
-
-    <pre>
-{
+    <h4>Successful Response — 200 OK</h4>
+    <pre>{
     "success": true,
-    "reports": [
+    "records": [
         {
-            "id": "REPORT_UUID",
-            "user_id": "USER_UUID",
+            "id": "RECORD_UUID",
             "waste_type": "Plastic",
-            "waste_weight": 5.5,
-            "area": "Rawang, Selangor",
-            "description": "Plastic bottles collected",
+            "area": "Rawang",
             "status": "Submitted",
-            "created_at": "TIMESTAMP"
+            "created_at": "2026-01-01T00:00:00Z"
         }
     ]
-}
-    </pre>
+}</pre>
+
+    <h3>8.3 Retrieve a Specific Waste Report</h3>
+
+    <p><strong>GET</strong> <code>/api/waste-records/:id</code></p>
 
     <p>
-        Reports are sorted by created_at in descending order.
-        The newest reports appear first.
+        Retrieves one waste report using its UUID. The endpoint checks
+        that the report belongs to the authenticated user.
     </p>
 
-    <p><strong>Possible errors:</strong></p>
+    <p><strong>Example</strong></p>
+    <pre>GET /api/waste-records/RECORD_UUID</pre>
 
-    <ul>
-        <li>401: Authentication required.</li>
-        <li>500: Unable to retrieve waste reports.</li>
-    </ul>
-
-    <h3>GET /api/waste-records/:id</h3>
-
-    <p><strong>Purpose:</strong></p>
-
-    <p>
-        Retrieves one waste report belonging to the
-        authenticated user.
-    </p>
-
-    <p><strong>Authentication:</strong> Required.</p>
-
-    <p><strong>Path parameter:</strong></p>
-
-    <ul>
-        <li>id: Valid UUID of the waste report.</li>
-    </ul>
-
-    <p><strong>Successful response (200):</strong></p>
-
-    <pre>
-{
+    <h4>Successful Response — 200 OK</h4>
+    <pre>{
     "success": true,
-    "report": {
-        "id": "REPORT_UUID",
-        "user_id": "USER_UUID",
+    "record": {
+        "id": "RECORD_UUID",
         "waste_type": "Plastic",
-        "waste_weight": 5.5,
-        "area": "Rawang, Selangor",
+        "area": "Rawang",
         "description": "Plastic bottles collected",
         "status": "Submitted"
     }
-}
-    </pre>
+}</pre>
 
-    <p><strong>Possible errors:</strong></p>
+    <h4>Record Not Found — 404 Not Found</h4>
+    <pre>{
+    "success": false,
+    "message": "Waste report not found"
+}</pre>
 
-    <ul>
-        <li>400: Invalid UUID format, if rejected by validateUUID middleware.</li>
-        <li>401: Authentication required.</li>
-        <li>404: Waste report not found or not owned by the user.</li>
-        <li>500: Unable to retrieve waste report.</li>
-    </ul>
+    <h3>8.4 Delete a Waste Report</h3>
 
-    <h3>DELETE /api/waste-records/:id</h3>
-
-    <p><strong>Purpose:</strong></p>
+    <p><strong>DELETE</strong> <code>/api/waste-records/:id</code></p>
 
     <p>
-        Deletes the authenticated user's own waste report,
-        but only when its current status is Submitted.
+        Allows a user to delete their own waste report only when its
+        status is <code>Submitted</code>.
     </p>
 
-    <p><strong>Authentication:</strong> Required.</p>
+    <p><strong>Example</strong></p>
+    <pre>DELETE /api/waste-records/RECORD_UUID</pre>
 
-    <p><strong>Path parameter:</strong></p>
-
-    <ul>
-        <li>id: Valid UUID of the waste report.</li>
-    </ul>
-
-    <p><strong>Successful response (200):</strong></p>
-
-    <pre>
-{
+    <h4>Successful Response — 200 OK</h4>
+    <pre>{
     "success": true,
     "message": "Waste report deleted successfully"
-}
-    </pre>
+}</pre>
 
-    <p><strong>Possible errors:</strong></p>
-
-    <ul>
-        <li>400: Invalid UUID format, if rejected by validateUUID middleware.</li>
-        <li>401: Authentication required.</li>
-        <li>404: Waste report not found or can no longer be deleted.</li>
-        <li>500: Unable to delete waste report.</li>
-    </ul>
+    <h4>Record Not Found or Not Eligible — 404 Not Found</h4>
+    <pre>{
+    "success": false,
+    "message": "Waste report not found or cannot be deleted"
+}</pre>
 
     <hr>
 
-    <h2>8. Admin Waste Records API</h2>
+    <h2>9. Admin Waste Records API</h2>
 
     <p>
-        Administrative endpoints allow authorized administrators
-        to review all waste reports and update their statuses.
+        These endpoints are restricted to authenticated administrators.
+        The admin middleware checks whether the authenticated user has
+        administrator access.
     </p>
 
-    <p><strong>Authentication:</strong> Required.</p>
-    <p><strong>Authorization:</strong> Administrator access required.</p>
+    <h3>9.1 Retrieve All Waste Reports</h3>
 
-    <h3>GET /api/admin/waste-records</h3>
-
-    <p><strong>Purpose:</strong></p>
+    <p><strong>GET</strong> <code>/api/admin/waste-records</code></p>
 
     <p>
-        Retrieves all waste reports for administrative review,
-        including the associated user's display name.
+        Retrieves all waste reports for administrative management.
+        The query also retrieves the related user's display name.
     </p>
 
-    <p><strong>Successful response (200):</strong></p>
+    <p><strong>Header</strong></p>
+    <pre>Authorization: Bearer ADMIN_ACCESS_TOKEN</pre>
 
-    <pre>
-{
+    <h4>Successful Response — 200 OK</h4>
+    <pre>{
     "success": true,
-    "reports": [
+    "records": [
         {
-            "id": "REPORT_UUID",
-            "user_id": "USER_UUID",
+            "id": "RECORD_UUID",
             "waste_type": "Plastic",
+            "area": "Rawang",
             "status": "Submitted",
             "user": {
                 "display_name": "John"
             }
         }
     ]
-}
-    </pre>
+}</pre>
+
+    <h3>9.2 Update Waste Report Status</h3>
+
+    <p><strong>PATCH</strong> <code>/api/admin/waste-records/:id/status</code></p>
 
     <p>
-        Each report also includes other fields returned
-        by the database. Reports are sorted newest first.
+        Allows an administrator to update the status of a waste report.
     </p>
 
-    <p><strong>Possible errors:</strong></p>
+    <p><strong>Request Body</strong></p>
+    <pre>{
+    "status": "Going"
+}</pre>
 
+    <p><strong>Allowed Status Values</strong></p>
     <ul>
-        <li>401: Authentication required.</li>
-        <li>403: Administrator permission required.</li>
-        <li>500: Unable to retrieve waste reports.</li>
+        <li><code>Submitted</code></li>
+        <li><code>Going</code></li>
+        <li><code>Resolved</code></li>
     </ul>
-
-    <h3>PATCH /api/admin/waste-records/:id/status</h3>
-
-    <p><strong>Purpose:</strong></p>
 
     <p>
-        Updates the status of an existing waste report.
-        Only authorized administrators can perform this operation.
+        The endpoint also records the administrator who made the change
+        and updates the report's timestamp. When the status becomes
+        <code>Resolved</code>, the resolution timestamp is recorded.
     </p>
 
-    <p><strong>Path parameter:</strong></p>
-
-    <ul>
-        <li>id: Valid UUID of the waste report.</li>
-    </ul>
-
-    <p><strong>Request body:</strong></p>
-
-    <pre>
-{
-    "status": "Resolved"
-}
-    </pre>
-
-    <p><strong>Accepted statuses:</strong></p>
-
-    <ul>
-        <li>Submitted</li>
-        <li>Going</li>
-        <li>Resolved</li>
-    </ul>
-
-    <p><strong>Automatic database updates:</strong></p>
-
-    <ul>
-        <li>last_edited_by: Authenticated administrator's user ID.</li>
-        <li>updated_at: Current timestamp.</li>
-        <li>resolved_at: Current timestamp when status is Resolved.</li>
-        <li>resolved_at: Set to null for other statuses.</li>
-    </ul>
-
-    <p><strong>Successful response (200):</strong></p>
-
-    <pre>
-{
+    <h4>Successful Response — 200 OK</h4>
+    <pre>{
     "success": true,
-    "message": "Waste record status updated successfully",
-    "report": {
-        "id": "REPORT_UUID",
-        "status": "Resolved",
-        "last_edited_by": "ADMIN_UUID",
-        "updated_at": "TIMESTAMP",
-        "resolved_at": "TIMESTAMP"
-    }
-}
-    </pre>
+    "message": "Waste report status updated successfully"
+}</pre>
 
-    <p><strong>Possible errors:</strong></p>
-
-    <ul>
-        <li>400: Invalid report status.</li>
-        <li>400: Invalid UUID format, if rejected by validateUUID middleware.</li>
-        <li>401: Authentication required.</li>
-        <li>403: Administrator permission required.</li>
-        <li>404: Waste report not found.</li>
-        <li>500: Unable to update report status.</li>
-    </ul>
+    <h4>Validation Error — 400 Bad Request</h4>
+    <pre>{
+    "success": false,
+    "message": "Invalid status"
+}</pre>
 
     <p>
-        Note: The current admin API supports status updates only.
-        Editing other report fields is not implemented in this route.
-        The Rejected status is also not currently accepted.
+        <strong>Note:</strong> This endpoint updates the report status.
+        It does not provide an endpoint for editing other waste report
+        information.
     </p>
 
     <hr>
 
-    <h2>9. Waste Analytics API</h2>
+    <h2>10. Waste Analytics API</h2>
 
     <p>
-        The analytics endpoints retrieve aggregated waste
-        reporting information using PostgreSQL functions
-        in Supabase.
+        The analytics endpoints use PostgreSQL stored functions through
+        Supabase RPC (Remote Procedure Call).
     </p>
 
-    <p><strong>Authentication:</strong> Required.</p>
-    <p><strong>Authorization:</strong> Authenticated users.</p>
+    <h3>10.1 Waste Hotspot Analysis</h3>
 
-    <h3>GET /api/analytics/hotspots</h3>
-
-    <p><strong>Purpose:</strong> Waste Hotspot Analysis.</p>
+    <p><strong>GET</strong> <code>/api/analytics/hotspots</code></p>
 
     <p>
-        Identifies areas with higher waste reporting activity
-        using the kitaro_analytics_hotspots database function.
+        Retrieves waste reporting information grouped by area to help
+        identify waste hotspots.
     </p>
 
-    <p><strong>Successful response (200):</strong></p>
+    <p><strong>Supabase RPC</strong></p>
+    <pre>kitaro_analytics_hotspots</pre>
 
-    <pre>
-{
+    <h4>Successful Response — 200 OK</h4>
+    <pre>{
     "success": true,
     "analytics": [
         {
-            "area": "AREA",
+            "area": "Rawang",
             "report_count": 10
         }
     ]
-}
-    </pre>
+}</pre>
 
     <p>
-        Example structure only. Actual fields depend on
-        the PostgreSQL function's returned columns.
+        The response above is an illustrative example. Refer to the
+        PostgreSQL function definition for the exact returned columns.
     </p>
 
-    <h3>GET /api/analytics/composition</h3>
+    <h3>10.2 Waste Composition Analysis</h3>
 
-    <p><strong>Purpose:</strong> Waste Composition Analysis.</p>
+    <p><strong>GET</strong> <code>/api/analytics/composition</code></p>
 
     <p>
-        Summarises waste types, report counts and total
-        waste weight using the kitaro_analytics_composition
-        database function.
+        Retrieves waste report counts and total waste weight grouped
+        by waste type.
     </p>
 
-    <p><strong>Successful response (200):</strong></p>
+    <p><strong>Supabase RPC</strong></p>
+    <pre>kitaro_analytics_composition</pre>
 
-    <pre>
-{
+    <h4>Successful Response — 200 OK</h4>
+    <pre>{
     "success": true,
     "analytics": [
         {
             "waste_type": "Plastic",
             "report_count": 10,
-            "total_weight": 50
+            "total_weight": 25
         }
     ]
-}
-    </pre>
+}</pre>
 
     <p>
-        The returned fields represent waste type,
-        report count and total recorded waste weight.
+        The returned columns are <code>waste_type</code>,
+        <code>report_count</code> and <code>total_weight</code>.
     </p>
 
-    <h3>GET /api/analytics/trends</h3>
+    <h3>10.3 Waste Reporting Trend Analysis</h3>
 
-    <p><strong>Purpose:</strong> Waste Reporting Trend Analysis.</p>
+    <p><strong>GET</strong> <code>/api/analytics/trends</code></p>
 
     <p>
-        Analyses waste reporting activity over time using
-        the kitaro_analytics_trends database function.
+        Retrieves waste reporting information over time to help identify
+        reporting trends.
     </p>
 
-    <p><strong>Successful response (200):</strong></p>
+    <p><strong>Supabase RPC</strong></p>
+    <pre>kitaro_analytics_trends</pre>
 
-    <pre>
-{
+    <h4>Successful Response — 200 OK</h4>
+    <pre>{
     "success": true,
     "analytics": [
         {
-            "period": "EXAMPLE_PERIOD",
+            "period": "2026-01",
             "report_count": 10
         }
     ]
-}
-    </pre>
+}</pre>
 
     <p>
-        Example structure only. Actual fields depend on
-        the PostgreSQL function's returned columns.
+        The response above is illustrative. Refer to the PostgreSQL
+        function definition for the exact returned columns.
     </p>
 
-    <p><strong>Possible errors for all analytics endpoints:</strong></p>
+    <hr>
 
+    <h2>11. Middleware and Security</h2>
+
+    <p>
+        KITARO uses Express middleware to handle authentication,
+        administrator authorization, input validation and errors.
+    </p>
+
+    <h3>11.1 authenticateUser</h3>
     <ul>
-        <li>401: Authentication required.</li>
-        <li>500: Unable to calculate the requested analytics.</li>
+        <li>Reads the access token from the Authorization header.</li>
+        <li>Verifies the token with Supabase Authentication.</li>
+        <li>Attaches the authenticated user to the request.</li>
+        <li>Prevents unauthenticated access to protected endpoints.</li>
+    </ul>
+
+    <h3>11.2 adminOnly</h3>
+    <ul>
+        <li>Checks whether the authenticated user is an administrator.</li>
+        <li>Restricts administrator endpoints to authorized users.</li>
+    </ul>
+
+    <h3>11.3 validateUUID</h3>
+    <ul>
+        <li>Validates record IDs used in URL parameters.</li>
+        <li>Prevents invalid UUID values from reaching database queries.</li>
+    </ul>
+
+    <h3>11.4 errorHandler</h3>
+    <ul>
+        <li>Provides centralized handling for Express errors.</li>
+        <li>Helps return consistent error responses.</li>
+    </ul>
+
+    <h3>11.5 Supabase Security</h3>
+    <ul>
+        <li>Uses Supabase Authentication to verify user identity.</li>
+        <li>Uses the authenticated user's ID when accessing personal records.</li>
+        <li>Restricts waste report access to the report owner.</li>
+        <li>Uses administrator authorization for admin-only endpoints.</li>
+        <li>Stores environment variables outside the source code.</li>
     </ul>
 
     <hr>
 
-    <h2>10. Middleware and Security</h2>
-
-    <h3>authenticateUser.js</h3>
-
-    <p>
-        Verifies the Supabase access token and identifies
-        the authenticated user before allowing access
-        to protected API operations.
-    </p>
-
-    <h3>adminOnly.js</h3>
-
-    <p>
-        Checks administrator authorization before allowing
-        access to administrative waste record operations.
-    </p>
-
-    <h3>validateUUID.js</h3>
-
-    <p>
-        Validates UUID parameters for individual waste record
-        endpoints before processing the request.
-    </p>
-
-    <h3>errorHandler.js</h3>
-
-    <p>
-        Provides centralized error handling for errors passed
-        to the Express error-handling middleware.
-        Individual route handlers also handle their own errors.
-    </p>
-
-    <h3>Data Security</h3>
-
-    <ul>
-        <li>Protected endpoints require authentication.</li>
-        <li>Users can only retrieve their own waste reports.</li>
-        <li>Users can only delete their own Submitted reports.</li>
-        <li>Administrator endpoints require admin authorization.</li>
-        <li>UUID parameters are validated before processing.</li>
-        <li>Profile updates are restricted to permitted fields.</li>
-        <li>Admin status updates record the administrator's user ID.</li>
-    </ul>
-
-    <hr>
-
-    <h2>11. HTTP Status Codes</h2>
+    <h2>12. HTTP Status Codes</h2>
 
     <table border="1" cellpadding="8">
         <thead>
             <tr>
-                <th>Code</th>
+                <th>Status Code</th>
                 <th>Meaning</th>
-                <th>Explanation</th>
+                <th>Usage</th>
             </tr>
         </thead>
-
         <tbody>
             <tr>
                 <td>200</td>
                 <td>OK</td>
                 <td>Request completed successfully.</td>
             </tr>
-
             <tr>
                 <td>201</td>
                 <td>Created</td>
-                <td>New account or waste report created.</td>
+                <td>A new account or waste report was created.</td>
             </tr>
-
             <tr>
                 <td>400</td>
                 <td>Bad Request</td>
                 <td>Invalid or missing request information.</td>
             </tr>
-
             <tr>
                 <td>401</td>
                 <td>Unauthorized</td>
                 <td>Authentication is missing or invalid.</td>
             </tr>
-
             <tr>
                 <td>403</td>
                 <td>Forbidden</td>
-                <td>Insufficient administrator permissions.</td>
+                <td>The authenticated user does not have permission.</td>
             </tr>
-
             <tr>
                 <td>404</td>
                 <td>Not Found</td>
-                <td>Requested resource or route does not exist.</td>
+                <td>The requested resource could not be found.</td>
             </tr>
-
             <tr>
                 <td>500</td>
                 <td>Internal Server Error</td>
-                <td>Unexpected backend or database error.</td>
+                <td>An unexpected server-side error occurred.</td>
             </tr>
-
             <tr>
                 <td>502</td>
                 <td>Bad Gateway</td>
-                <td>External postcode service returned an unsuccessful response.</td>
+                <td>An external service request failed.</td>
             </tr>
-
             <tr>
                 <td>503</td>
                 <td>Service Unavailable</td>
-                <td>Supabase health check failed.</td>
+                <td>A required service is unavailable.</td>
             </tr>
         </tbody>
     </table>
 
     <hr>
 
-    <h2>12. Error Response Examples</h2>
-
-    <h3>400 - Invalid Request</h3>
-
-    <pre>
-{
-    "success": false,
-    "message": "Invalid report status"
-}
-    </pre>
-
-    <h3>401 - Unauthorized</h3>
+    <h2>13. Error Response Examples</h2>
 
     <p>
-        Returned by authentication middleware when a request
-        does not contain valid authentication credentials.
-        Exact response depends on middleware implementation.
+        API errors generally return a JSON response containing
+        <code>success</code> and <code>message</code> fields.
+        The exact response depends on the endpoint and middleware.
     </p>
 
-    <h3>403 - Forbidden</h3>
+    <h3>Missing Required Fields</h3>
+    <pre>{
+    "success": false,
+    "message": "Required fields are missing"
+}</pre>
+
+    <h3>Invalid Authentication</h3>
+    <pre>{
+    "success": false,
+    "message": "Unauthorized"
+}</pre>
+
+    <h3>Insufficient Permissions</h3>
+    <pre>{
+    "success": false,
+    "message": "Forbidden"
+}</pre>
+
+    <h3>Unexpected Server Error</h3>
+    <pre>{
+    "success": false,
+    "message": "Internal server error"
+}</pre>
 
     <p>
-        Returned when the authenticated user does not have
-        administrator permission. Exact response depends
-        on admin middleware implementation.
-    </p>
-
-    <h3>404 - Resource Not Found</h3>
-
-    <pre>
-{
-    "success": false,
-    "message": "Waste report not found"
-}
-    </pre>
-
-    <h3>500 - Internal Server Error</h3>
-
-    <pre>
-{
-    "success": false,
-    "message": "Unable to retrieve waste reports"
-}
-    </pre>
-
-    <h3>502 - External Service Error</h3>
-
-    <pre>
-{
-    "success": false,
-    "message": "Postcode lookup service is unavailable"
-}
-    </pre>
-
-    <h3>503 - Service Unavailable</h3>
-
-    <pre>
-{
-    "success": false,
-    "message": "Supabase is unavailable"
-}
-    </pre>
-
-    <hr>
-
-    <h2>13. Backend Testing Results</h2>
-
-    <p>
-        The following table records tests previously completed
-        during KITARO backend development.
-        These are historical test results, not live monitoring.
-    </p>
-
-    <table border="1" cellpadding="8">
-        <thead>
-            <tr>
-                <th>Test</th>
-                <th>Expected Result</th>
-                <th>Recorded Result</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <tr>
-                <td>Express Server Startup</td>
-                <td>Server starts successfully.</td>
-                <td>PASS</td>
-            </tr>
-
-            <tr>
-                <td>GET /api/health</td>
-                <td>Returns HTTP 200 and health message.</td>
-                <td>PASS</td>
-            </tr>
-
-            <tr>
-                <td>Unknown API Route</td>
-                <td>Returns HTTP 404.</td>
-                <td>PASS</td>
-            </tr>
-
-            <tr>
-                <td>Supabase Connection Test</td>
-                <td>Successfully connects to Supabase.</td>
-                <td>PASS</td>
-            </tr>
-
-            <tr>
-                <td>GET /api/health/supabase</td>
-                <td>Returns HTTP 200 when Supabase is available.</td>
-                <td>NOT VERIFIED</td>
-            </tr>
-
-            <tr>
-                <td>Signup and Login</td>
-                <td>Creates accounts and authenticates users.</td>
-                <td>NOT VERIFIED</td>
-            </tr>
-
-            <tr>
-                <td>Profile Operations</td>
-                <td>Retrieves and updates user profiles.</td>
-                <td>NOT VERIFIED</td>
-            </tr>
-
-            <tr>
-                <td>Postcode Lookup</td>
-                <td>Returns and saves matching area information.</td>
-                <td>NOT VERIFIED</td>
-            </tr>
-
-            <tr>
-                <td>Waste Reporting</td>
-                <td>Creates and retrieves waste reports.</td>
-                <td>NOT VERIFIED</td>
-            </tr>
-
-            <tr>
-                <td>Waste Report Deletion</td>
-                <td>Deletes eligible Submitted reports only.</td>
-                <td>NOT VERIFIED</td>
-            </tr>
-
-            <tr>
-                <td>Admin Authorization</td>
-                <td>Restricts admin operations to administrators.</td>
-                <td>NOT VERIFIED</td>
-            </tr>
-
-            <tr>
-                <td>Admin Status Update</td>
-                <td>Updates valid waste report statuses.</td>
-                <td>NOT VERIFIED</td>
-            </tr>
-
-            <tr>
-                <td>Waste Analytics</td>
-                <td>Returns aggregated SQL analytics.</td>
-                <td>NOT VERIFIED</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <p>
-        PASS indicates a previously confirmed successful test.
-        NOT VERIFIED indicates that the individual endpoint
-        test has not yet been confirmed.
+        These are general examples. Actual error messages and response
+        formats are determined by each route and middleware.
     </p>
 
     <hr>
 
-    <h2>14. KITARO API Summary</h2>
+    <h2>14. Environment Variables</h2>
 
     <p>
-        KITARO provides backend services to support waste
-        reporting, user management, administrative workflows
-        and waste data analysis.
+        The backend uses environment variables to keep configuration
+        and sensitive credentials outside the source code.
     </p>
+
+    <p><strong>Example .env file</strong></p>
+    <pre>
+PORT=5000
+FRONTEND_URL=http://localhost:5173
+SUPABASE_URL=YOUR_SUPABASE_URL
+SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
+    </pre>
 
     <p>
-        The backend uses Express.js to manage API requests,
-        Supabase PostgreSQL to store and analyse data,
-        and Supabase Authentication to secure user access.
+        Do not publish actual credentials or commit the
+        <code>.env</code> file to GitHub.
     </p>
+
+    <hr>
+
+    <h2>15. Testing the API</h2>
 
     <p>
-        The modular backend structure separates route handling,
-        authentication, authorization, validation and database
-        operations to support maintainability and code organisation.
+        API endpoints can be tested using Postman or another HTTP
+        client.
     </p>
 
-    <p><strong>Making every resource count.</strong></p>
+    <ol>
+        <li>Start the backend server.</li>
+        <li>Test <code>GET /api/health</code> to check the API.</li>
+        <li>Test <code>GET /api/health/supabase</code> to check the database connection.</li>
+        <li>Register a user using <code>POST /api/auth/signup</code>.</li>
+        <li>Sign in using <code>POST /api/auth/login</code>.</li>
+        <li>Copy the access token from the login response.</li>
+        <li>Add the token to the Authorization header for protected endpoints.</li>
+        <li>Test the profile, postcode and waste record endpoints.</li>
+        <li>Test administrator endpoints using an authorized admin account.</li>
+        <li>Test analytics endpoints to retrieve database analysis results.</li>
+    </ol>
+
+    <hr>
+
+    <h2>16. Project Structure</h2>
+
+    <pre>
+kitaro-server/
+│
+├── middleware/
+│   ├── adminOnly.js
+│   ├── authenticateUser.js
+│   ├── errorHandler.js
+│   └── validateUUID.js
+│
+├── routes/
+│   ├── adminWasteRecords.js
+│   ├── analytics.js
+│   ├── auth.js
+│   ├── health.js
+│   ├── postcode.js
+│   ├── profile.js
+│   └── wasteRecords.js
+│
+├── .env
+├── .gitignore
+├── index.html
+├── index.js
+├── package.json
+├── package-lock.json
+├── readme.md
+├── supabaseClient.js
+└── testSupabase.js
+    </pre>
+
+    <hr>
+
+    <h2>17. KITARO API Summary</h2>
+
+    <p>
+        The KITARO backend provides the following main capabilities:
+    </p>
+
+    <ul>
+        <li><strong>Authentication:</strong> User registration, login and token verification through Supabase.</li>
+        <li><strong>Profile Management:</strong> Retrieve and update user profile information.</li>
+        <li><strong>Postcode Lookup:</strong> Retrieve Malaysian postcode area information through Countries.dev.</li>
+        <li><strong>Waste Reporting:</strong> Submit, retrieve and delete eligible waste reports.</li>
+        <li><strong>Administration:</strong> Retrieve all reports and update their statuses.</li>
+        <li><strong>Waste Analytics:</strong> Analyse waste hotspots, waste composition and reporting trends using
+            PostgreSQL functions.</li>
+    </ul>
+
+    <p>
+        The backend connects the KITARO frontend with Supabase
+        Authentication, PostgreSQL database services and external
+        postcode lookup services.
+    </p>
+
+    <hr>
+
+    <p>
+        <strong>KITARO API Documentation</strong><br>
+        Backend powered by Node.js, Express.js and Supabase.
+    </p>
 
 </body>
 
