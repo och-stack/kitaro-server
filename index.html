@@ -1263,69 +1263,7 @@
 
     <hr>
 
-    <h2>14. API Testing Instructions</h2>
-
-    <p><strong>Recommended testing tools:</strong></p>
-
-    <ul>
-        <li>Postman</li>
-        <li>Thunder Client (VS Code)</li>
-        <li>Web browser for GET requests</li>
-    </ul>
-
-    <p><strong>Testing procedure:</strong></p>
-
-    <ol>
-        <li>Start the backend server.</li>
-        <li>Check GET /api/health.</li>
-        <li>Check GET /api/health/supabase.</li>
-        <li>Register a test account.</li>
-        <li>Log in and obtain the access token.</li>
-        <li>Include the access token in protected requests.</li>
-        <li>Test profile retrieval and updates.</li>
-        <li>Test postcode lookup.</li>
-        <li>Submit and retrieve waste reports.</li>
-        <li>Test report deletion using a Submitted report.</li>
-        <li>Test admin operations using an administrator account.</li>
-        <li>Test all three analytics endpoints.</li>
-        <li>Test invalid requests and unauthorized access.</li>
-    </ol>
-
-    <hr>
-
-    <h2>15. Backend Project Structure</h2>
-
-    <pre>
-kitaro-server/
-│
-├── middleware/
-│   ├── adminOnly.js
-│   ├── authenticateUser.js
-│   ├── errorHandler.js
-│   └── validateUUID.js
-│
-├── routes/
-│   ├── adminWasteRecords.js
-│   ├── analytics.js
-│   ├── auth.js
-│   ├── health.js
-│   ├── postcode.js
-│   ├── profile.js
-│   └── wasteRecords.js
-│
-├── index.js
-├── index.html
-├── supabaseClient.js
-├── testSupabase.js
-├── package.json
-├── package-lock.json
-├── .env
-└── .gitignore
-    </pre>
-
-    <hr>
-
-    <h2>16. KITARO API Summary</h2>
+    <h2>14. KITARO API Summary</h2>
 
     <p>
         KITARO provides backend services to support waste
