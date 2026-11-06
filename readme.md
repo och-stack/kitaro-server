@@ -22,34 +22,6 @@ This repository contains the backend API built with **Node.js and Express.js**, 
 - **Admin Management** – View all waste reports and update report statuses.
 - **Waste Analytics** – Retrieve waste hotspot, composition and reporting trend analysis.
 
-## Project Structure
-
-kitaro-server/
-│
-├── middleware/
-│   ├── adminOnly.js
-│   ├── authenticateUser.js
-│   ├── errorHandler.js
-│   └── validateUUID.js
-│
-├── routes/
-│   ├── adminWasteRecords.js
-│   ├── analytics.js
-│   ├── auth.js
-│   ├── health.js
-│   ├── postcode.js
-│   ├── profile.js
-│   └── wasteRecords.js
-│
-├── .env
-├── .gitignore
-├── index.html
-├── index.js
-├── package.json
-├── package-lock.json
-├── readme.md
-├── supabaseClient.js
-
 ### Folder Overview
 
 | Folder / File | Purpose |
